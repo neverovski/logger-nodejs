@@ -30,31 +30,31 @@ class Logger {
       name: `${app.name.toLowerCase()}::error`,
       level: 'error',
       hooks: { logMethod },
-      prettyPrint: this.prettyPrint
+      prettyPrint: this.prettyPrint,
     });
     this.warnLogger = pino({
       name: `${app.name.toLowerCase()}::warn`,
       level: 'warn',
       hooks: { logMethod },
-      prettyPrint: this.prettyPrint
+      prettyPrint: this.prettyPrint,
     });
     this.infoLogger = pino({
       name: `${app.name.toLowerCase()}::info`,
       level: 'info',
       hooks: { logMethod },
-      prettyPrint: this.prettyPrint
+      prettyPrint: this.prettyPrint,
     });
     this.debugLogger = pino({
       name: `${app.name.toLowerCase()}::debug`,
       level: 'debug',
       hooks: { logMethod },
-      prettyPrint: this.prettyPrint
+      prettyPrint: this.prettyPrint,
     });
     this.traceLogger = pino({
       name: `${app.name.toLowerCase()}::trace`,
       level: 'trace',
       hooks: { logMethod },
-      prettyPrint: this.prettyPrint
+      prettyPrint: this.prettyPrint,
     });
   }
 
@@ -62,8 +62,8 @@ class Logger {
     return {
       colorize: true,
       translateTime: 'SYS:yyyy-mm-dd HH:MM:ss',
-      ignore: 'hostname'
-    }
+      ignore: 'hostname',
+    };
   }
 
   /**
