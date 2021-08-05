@@ -1,8 +1,8 @@
-import { logger } from './core';
+import { Logger } from './utils';
 
-logger.fatal('Logger FATAL', new Error('MESSAGE - FATAL'));
-logger.error('Logger ERROR', new Error('MESSAGE - ERROR'));
-logger.warn('Logger WARN', new Error('MESSAGE - WARN'));
-logger.info('Logger INFO', { message: 'MESSAGE - INFO' });
-logger.debug('Logger DEBUG', { message: 'MESSAGE - DEBUG' });
-logger.trace('Logger TRACE', { message: 'MESSAGE - TRACE' });
+Logger.fatal('Logger FATAL', new Error('MESSAGE - FATAL'));
+Logger.error('Logger ERROR', new Error('MESSAGE - ERROR'));
+Logger.warn('Logger WARN', new Error('MESSAGE - WARN'));
+Logger.info('Logger INFO', { message: 'MESSAGE - INFO' });
+Logger.debug('Logger DEBUG', { message: 'MESSAGE - DEBUG' });
+Logger.trace('Logger TRACE', { message: 'MESSAGE - TRACE' });

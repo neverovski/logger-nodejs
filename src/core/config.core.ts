@@ -1,20 +1,13 @@
-import pino from 'pino';
 import path from 'path';
-import * as Join from '@hapi/joi';
+
 import { config } from 'dotenv';
+import Join, { Root as JoinRoot, Schema } from 'joi';
 
 config({ path: path.join(process.cwd(), '.env') });
 
 export default class ConfigCore {
-  get joi(): Join.Root {
+  protected get joi(): JoinRoot {
     return Join;
-  }
-
-  private get warnLogger(): pino.Logger {
-    return pino({
-      name: 'env-warning',
-      prettyPrint: { translateTime: 'SYS:standard' },
-    });
   }
 
   /**
@@ -26,33 +19,22 @@ export default class ConfigCore {
    * @param defaultVal
    * @returns {*}
    */
-  set(env: any, validator: any, defaultVal: any): any {
-    let value;
+  protected set<T>(env: string, validator: Schema, defaultVal: T | null): T {
+    let item: any;
     if (process.env[env] || process.env[env] === '') {
-      value = process.env[env];
+      item = process.env[env];
     } else {
       if (defaultVal === undefined) {
         throw new Error(`Missing default value "${env}".`);
       }
-      value = defaultVal;
-      this.warnLogger.warn(`Missing env variable: "${env}". Default value was applied: ${defaultVal}`);
+      item = defaultVal;
     }
 
-    if (validator && (typeof validator === 'function' || typeof validator === 'object')) {
-      if (typeof validator === 'object') {
-        // joi object
-        const joiResult = validator.validate(value);
-        if (!joiResult.error) return value;
-        throw new Error(`Wrong "${env}" variable; Value: "${value}" is invalid. ${joiResult.error}`);
-      }
+    const { error, value } = validator.validate(item);
 
-      if (!validator(value)) {
-        throw new Error(`Wrong "${env}" variable; Value: "${value}" is invalid.`);
-      }
-
-      return value;
-    }
-
-    throw new Error('validator should be a function or joi rule.');
+    if (!error) return value as T;
+    throw new Error(
+      `Wrong "${env}" variable; Value: "${value}" is invalid. ${error}`,
+    );
   }
 }

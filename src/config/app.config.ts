@@ -1,15 +1,20 @@
-import { ConfigCore } from '../core';
-import { ENV_DEVELOPMENT, ENV_PRODUCTION, ENV_TEST } from '../utils/Constants';
+import { ConfigCore } from '@core/index';
+import { ENV_DEVELOPMENT, ENV_PRODUCTION, ENV_TEST } from '@utils/index';
 
 class AppConfig extends ConfigCore {
-  nodeENV: string;
   name: string;
+  env: string;
 
   constructor() {
     super();
-    this.nodeENV = this.set('NODE_ENV', (v) => [ENV_DEVELOPMENT, ENV_PRODUCTION, ENV_TEST].includes(v), ENV_DEVELOPMENT);
-    this.name = this.set('APP_NAME', this.joi.string().required(), 'LOGGER');
+
+    this.env = this.set<string>(
+      'ENV',
+      this.joi.string().valid(ENV_DEVELOPMENT, ENV_PRODUCTION, ENV_TEST),
+      ENV_DEVELOPMENT,
+    );
+    this.name = this.set<string>('APP_NAME', this.joi.string().required(), '');
   }
 }
 
-export const appConfig = new AppConfig();
+export default new AppConfig();
