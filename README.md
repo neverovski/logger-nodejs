@@ -7,10 +7,10 @@
 $ npm install
 $ npm run start:dev
 ```
+## Contribution
 
-## Pull Request
+Happy to get your feedback, but also you are feel free to raise a pull request.
 
-  - [ ] This Pull request implements new feature, fix bug, or some other changes
-  - [ ] If PR is not ready to review mark it as Draft
-  - [ ] All commits in this PR should be created by `npm commit` by [conventional-commits](https://www.conventionalcommits.org/en/v1.0.0/)
-  - [ ] Title of the PR should have issue(s) identifier(s) ("BOX-123 Example title of PR")
+## License
+
+This library is released under the MIT License.
