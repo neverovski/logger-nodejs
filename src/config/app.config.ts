@@ -2,8 +2,8 @@ import { ConfigCore } from '@core/index';
 import { ENV_DEVELOPMENT, ENV_PRODUCTION, ENV_TEST } from '@utils/index';
 
 class AppConfig extends ConfigCore {
-  name: string;
   env: string;
+  name: string;
 
   constructor() {
     super();

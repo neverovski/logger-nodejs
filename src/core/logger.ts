@@ -1,20 +1,19 @@
-import pino, { LogFn } from 'pino';
+import pino from 'pino';
 
 import { AppConfig } from '@config/index';
-
-import { ENV_TEST, PRETTY_PRINT } from '../constants';
+import { ENV_TEST, PRETTY_PRINT } from '@utils/index';
 
 interface ILogger {
   name: string;
 }
 
 export class Logger {
-  private readonly fatalLogger: pino.Logger;
-  private readonly errorLogger: pino.Logger;
-  private readonly warnLogger: pino.Logger;
-  private readonly infoLogger: pino.Logger;
   private readonly debugLogger: pino.Logger;
+  private readonly errorLogger: pino.Logger;
+  private readonly fatalLogger: pino.Logger;
+  private readonly infoLogger: pino.Logger;
   private readonly traceLogger: pino.Logger;
+  private readonly warnLogger: pino.Logger;
 
   constructor(app: ILogger) {
     this.fatalLogger = pino({
@@ -54,19 +53,9 @@ export class Logger {
     });
   }
 
-  private logMethod(args: any[], method: LogFn): void {
-    if (args.length === 2) {
-      // eslint-disable-next-line no-param-reassign
-      args[0] = `${args[0]} %j`;
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    method.apply(this, args);
-  }
-
-  fatal(message: string, error: Error, meta?: any): void {
+  debug(message: string): void {
     if (AppConfig.env !== ENV_TEST) {
-      this.fatalLogger.fatal(message, meta || error.toString());
+      this.debugLogger.debug(message);
     }
   }
 
@@ -76,28 +65,38 @@ export class Logger {
     }
   }
 
+  fatal(message: string, error: Error, meta?: any): void {
+    if (AppConfig.env !== ENV_TEST) {
+      this.fatalLogger.fatal(message, meta || error.toString());
+    }
+  }
+
+  info(message: string): void {
+    if (AppConfig.env !== ENV_TEST) {
+      this.infoLogger.info(message);
+    }
+  }
+
+  trace(message: string): void {
+    if (AppConfig.env !== ENV_TEST) {
+      this.traceLogger.trace(message);
+    }
+  }
+
   warn(message: string, error: Error, meta?: any): void {
     if (AppConfig.env !== ENV_TEST) {
       this.warnLogger.warn(message, meta || error.toString());
     }
   }
 
-  info(message: string, meta: any = {}): void {
-    if (AppConfig.env !== ENV_TEST) {
-      this.infoLogger.info(message, Object.keys(meta).length ? meta : '');
+  private logMethod(args: any[], method: pino.LogFn): void {
+    if (args.length === 2) {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      args[0] = `${args[0]} %j`;
     }
-  }
-
-  debug(message: string, meta: any = {}): void {
-    if (AppConfig.env !== ENV_TEST) {
-      this.debugLogger.debug(message, Object.keys(meta).length ? meta : '');
-    }
-  }
-
-  trace(message: string, meta: any = {}): void {
-    if (AppConfig.env !== ENV_TEST) {
-      this.traceLogger.trace(message, Object.keys(meta).length ? meta : '');
-    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    method.apply(this, args);
   }
 }
 
